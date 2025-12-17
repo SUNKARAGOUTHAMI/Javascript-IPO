@@ -16,18 +16,12 @@ const IPOTimelineMobile = ({ timeline }) => {
         <div key={step.key} className="flex items-start gap-4 relative">
           {/* Circle and connecting line */}
           <div className="relative flex flex-col items-center">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              index === 0 ? 'bg-success' : 'bg-muted'
-            }`}>
-              {index === 0 ? (
-                <Check className="w-4 h-4 text-success-foreground" />
-              ) : (
-                <div className="w-2 h-2 rounded-full bg-muted-foreground/40" />
-              )}
+            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-success">
+              <Check className="w-4 h-4 text-success-foreground" />
             </div>
             {/* Vertical line */}
             {index < timelineSteps.length - 1 && (
-              <div className="w-0.5 h-12 bg-border" />
+              <div className="w-0.5 h-12 bg-success" />
             )}
           </div>
 
