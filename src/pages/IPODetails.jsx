@@ -3,10 +3,26 @@ import { getIPOById } from "../data/ipoData.js";
 import { ChevronLeft, ChevronRight, Download, Check } from "lucide-react";
 import IPOTimeline from "../components/IPOTimeline.jsx";
 import IPOTimelineMobile from "../components/IPOTimelineMobile.jsx";
+import { useToast } from "@/hooks/use-toast";
 
 const IPODetails = () => {
   const { id } = useParams();
   const ipo = getIPOById(id);
+  const { toast } = useToast();
+
+  const handleDownload = () => {
+    toast({
+      title: "Download Successful",
+      description: "IPO document has been downloaded successfully.",
+    });
+  };
+
+  const handleApply = () => {
+    toast({
+      title: "Application Submitted",
+      description: "Your IPO application has been submitted successfully.",
+    });
+  };
 
   if (!ipo) {
     return (
@@ -59,10 +75,16 @@ const IPODetails = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button className="w-10 h-10 rounded-lg border border-border flex items-center justify-center hover:bg-secondary transition-colors">
+              <button 
+                onClick={handleDownload}
+                className="w-10 h-10 rounded-lg border border-border flex items-center justify-center hover:bg-secondary transition-colors"
+              >
                 <Download className="w-5 h-5 text-foreground" />
               </button>
-              <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors">
+              <button 
+                onClick={handleApply}
+                className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
                 Apply now
               </button>
             </div>
@@ -208,7 +230,10 @@ const IPODetails = () => {
 
         {/* Mobile Apply Button */}
         <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-card border-t border-border">
-          <button className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors">
+          <button 
+            onClick={handleApply}
+            className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+          >
             Apply now
           </button>
         </div>
