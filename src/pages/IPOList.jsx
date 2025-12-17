@@ -43,11 +43,22 @@ const IPOList = () => {
     setIpoList([...defaultIpoData, ...customIPOs]);
   }, []);
 
+  // Calculate status based on listing date
+  const getCalculatedStatusForFilter = (ipo) => {
+    if (!ipo.timeline?.listingDate || ipo.timeline.listingDate === "TBA") {
+      return ipo.status || "upcoming";
+    }
+    const listingDate = new Date(ipo.timeline.listingDate);
+    const currentDate = new Date();
+    return listingDate <= currentDate ? "listed" : "upcoming";
+  };
+
   // Filter IPOs based on search and status
   const filteredIPOs = ipoList.filter((ipo) => {
     const matchesSearch = ipo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ipo.fullName?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === "all" || ipo.status === statusFilter;
+    const calculatedStatus = getCalculatedStatusForFilter(ipo);
+    const matchesStatus = statusFilter === "all" || calculatedStatus === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
@@ -104,7 +115,24 @@ const IPOList = () => {
     setIsAddDialogOpen(false);
   };
 
-  const getStatusBadge = (status) => {
+  // Calculate status based on listing date
+  const getCalculatedStatus = (ipo) => {
+    if (!ipo.timeline?.listingDate || ipo.timeline.listingDate === "TBA") {
+      return ipo.status || "upcoming";
+    }
+    
+    const listingDate = new Date(ipo.timeline.listingDate);
+    const currentDate = new Date();
+    
+    if (listingDate <= currentDate) {
+      return "listed";
+    } else {
+      return "upcoming";
+    }
+  };
+
+  const getStatusBadge = (ipo) => {
+    const status = getCalculatedStatus(ipo);
     const styles = {
       upcoming: "bg-primary/10 text-primary",
       announced: "bg-warning/10 text-warning",
@@ -324,7 +352,7 @@ const IPOList = () => {
 
                   {/* Status */}
                   <div className="text-center">
-                    {getStatusBadge(ipo.status)}
+                    {getStatusBadge(ipo)}
                   </div>
 
                   {/* Min Investment */}
@@ -364,7 +392,7 @@ const IPOList = () => {
                       <p className="text-sm text-muted-foreground">{ipo.issueDate}</p>
                     </div>
                   </div>
-                  {getStatusBadge(ipo.status)}
+                  {getStatusBadge(ipo)}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
