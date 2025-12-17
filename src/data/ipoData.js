@@ -102,5 +102,16 @@ export const ipoData = [
 ];
 
 export const getIPOById = (id) => {
-  return ipoData.find((ipo) => ipo.id === id);
+  // Check default data first
+  const defaultIPO = ipoData.find((ipo) => ipo.id === id);
+  if (defaultIPO) return defaultIPO;
+  
+  // Check custom IPOs in localStorage
+  const storedIPOs = localStorage.getItem("customIPOs");
+  if (storedIPOs) {
+    const customIPOs = JSON.parse(storedIPOs);
+    return customIPOs.find((ipo) => ipo.id === id);
+  }
+  
+  return null;
 };
